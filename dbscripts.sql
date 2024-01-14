@@ -388,6 +388,44 @@ insert into coa values ('2.04.00',2,'Accrued Expenses','Kewajiban yang Masih Ber
 insert into coa values ('2.05.00',2,'Current Liabilities','Kewajiban Lancar / Jangka Pendek','Kewajiban yang akan dilunasi dalam 1 tahun atau kurang, mis. gaji karyawan, utang usaha, utang bank dll');
 insert into coa values ('2.06.00',2,'Long Term Debt','Kewajiban Jangka Panjang','Kewajiban yang akan dilunasi di atas 1 tahun. Misal: cicilan kendaraan');
 
+insert into coa values ('3.01.11',3,'Owners Capital','Modal Usaha','');
+insert into coa values ('3.02.01',3,'Retained Earnings','Laba Ditahan','Laba yang tidak dibagikan ke pemilik modal dan digunakan untuk menambah modal usaha');
+insert into coa values ('3.02.02',3,'Current Earnings','Laba Bersih','Akumulasi laba dalam satu tahun yang akan dinolkan lagi setiap pergantian tahun');
 
+insert into coa values ('4.01.00',4,'Revenue from the Sale of Goods','Pendapatan Penjualan Produk','');
+insert into coa values ('4.02.00',4,'Revenue from the Rendering of Services','Pendapatan Penjualan Jasa','');
 
+insert into coa values ('5.01.00',5,'Cost of Goods Sold','Harga Pokok Penjualan','Seluruh biaya yang dikeluarkan untuk memperoleh produk yang akan dijual');
+
+insert into coa values ('6.01.01',6,'Salaries Expense','Beban Gaji','');
+insert into coa values ('6.01.02',6,'Wages Expense','Beban Upah','');
+insert into coa values ('6.02.01',6,'Bonus Expense','Beban Bonus Mitra','');
+insert into coa values ('6.02.02',6,'Reward Expense','Beban Reward Mitra','');
+insert into coa values ('6.03.00',6,'Shipping Expense','Biaya Pengiriman Barang','');
+insert into coa values ('6.04.00',6,'Education Expense','Beban Edukasi Mitra','');
+insert into coa values ('6.05.00',6,'Promotion Expense','Beban Promosi','');
+insert into coa values ('6.06.00',6,'Travel Expense','Beban untuk Perjalanan','');
+insert into coa values ('6.07.00',6,'Licensing and Membership','Beban Perizinan dan Keanggotaan','');
+insert into coa values ('6.08.00',6,'IT Services Expense','Beban Layanan IT','');
+insert into coa values ('6.09.00',6,'Supplies Expense','Beban Barang Habis','');
+insert into coa values ('6.10.00',6,'Rent Expense','Beban Sewa','');
+insert into coa values ('6.11.01',6,'Utilities Expense','Beban Listrik dan Air','');
+insert into coa values ('6.12.02',6,'Telephone Expense','Beban Telepon','');
+insert into coa values ('6.12.03',6,'Internet Expense','Beban Internet','');
+insert into coa values ('6.13.00',6,'Depreciation Expense','Beban Penyusutan','');
+
+insert into coa values ('7.01.00',7,'Interest Revenues','Pendapatan Bunga','');
+insert into coa values ('7.02.00',7,'Gain on Sale of Assets','Keuntungan dari Penjualan Aset','');
+insert into coa values ('7.03.00',7,'Currency Gain','Keuntungan Selisih Kurs','');
+insert into coa values ('7.04.00',7,'Other Revenues','Pendapatan Lain-Lain','');
+
+insert into coa values ('8.01.00',8,'Interest Expense','Beban Bunga','');
+insert into coa values ('8.02.00',8,'Tax on Saving Interest','Pajak dari Bunga Simpanan','');
+insert into coa values ('8.03.00',8,'Loss on Sale of Assets','Kerugian dari Penjualan Aset','');
+insert into coa values ('8.04.00',8,'Currency Loss','Kerugian Selisih Kurs','');
+insert into coa values ('8.05.00',8,'Other Expenses','Beban Lain-Lain','');
+
+insert into coa values ('9.01.00',9,'Correction','Koreksi','Digunakan untuk koreksi atas kesalahan input, stock opname, atau dari perubahan lainnya');
+insert into coa values ('9.02.00',9,'Distributor’s Inventory','Inventori Stokis/Master Stokis','Digunakan untuk menghitung inventori produk yang ada di stokis/master stokis. Di sini yang diisi adalah qty (kuantitas) dari produk saja dan bukan nominalnya. Tidak diikutkan dalam perhitungan laporan keuangan perusahaan');
+insert into coa values ('9.03.00',9,'Moving Inventory','Inventori dalam Perjalanan','Digunakan untuk menandai inventori produk yang sedang dalam perjalanan perjalanan pengiriman. Ini perlu dicatat karena bisa saja ada pengiriman menggunakan kapal yang membutuhkan waktu beberapa hari. Yang dicatat adalah kuantitasnya saja');
 
