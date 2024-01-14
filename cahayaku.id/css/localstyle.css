@@ -1,0 +1,274 @@
+body{
+  background-color: #1E1E1E;
+  font-family: 'sansationregular';
+  font-size: min(1.5vmax,24px);
+}
+.navbarku {
+  background-color: #F1EEE9;
+}
+.tulisan1 {
+  color: #99784C;
+}
+.tulisan2 {
+  color: #C0C9D8;
+  margin-top:0.4rem;
+}
+.col {
+  padding: 0;
+}
+.navbar {
+  padding-top: 0;
+  padding-bottom: 0;
+  height:5rem;
+}
+.navbar-nav {
+  --bs-nav-link-padding-y: 0.5rem;
+}
+.bulet {
+  border-bottom-left-radius:3rem;
+}
+.kiri {
+  margin-right: -1rem;
+}
+.kanan {
+  padding-right:max(10rem,calc(30vw - 10rem));
+  padding-bottom:0.75rem;
+}
+.menu-lain-horz {
+  margin-top: -1.5rem;
+/*  margin-bottom: min(calc(1vmax - 1.75rem),-0.8rem);*/
+  margin-bottom: min(calc(1vmax - 2.2rem),-1.3rem);
+  padding-top: 1rem;
+  margin-left: 1rem;
+}
+.menu-lain {
+  background-color: #7877B8;
+  padding-left:0.5rem;
+}
+.container-fluid {
+  padding: 0;
+  margin-right: auto;
+}
+.nav-item {
+  padding-left: 1.5rem;
+  z-index:5;
+}
+.navbar-toggler {
+  margin: 0.35rem;
+  margin-right:1rem;
+  margin-top: 0.9rem;
+  height:3rem;
+  z-index:5;
+}
+.navbar-toggler.collapsed {
+  margin-top: 0.1rem;
+  margin-right:1rem;
+}
+.batas {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  padding: 0;
+  margin: 0;
+}
+.row {
+  --bs-gutter-x: 0;
+}
+.title-narrow {
+  text-align:center;
+  position:absolute;
+  color:black;
+  top:1.5rem;
+  z-index:1;
+  font-family: 'Josefin Sans';
+  font-style: italic;
+  font-weight:bold;
+  color: #7877B8;
+  font-size:3vw;
+}
+.rowatas {
+  background-image: url('../img/duriat_home_2.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+.product_desc {
+  width:30vw;
+  position:absolute;
+  bottom:4rem;
+  right:2rem;
+  color: white;
+  font-size: min(1.5vmin,24px);
+}
+.product_desc_narrow1 {
+  width:50vw;
+  position:absolute;
+  top:4vh;
+  right:8vw;
+  color: white;
+  font-size: 1.5vmax;
+  text-shadow: 0.2em 0.2em 0.3em #888888;
+  z-index:4;
+}
+.product_desc_narrow2 {
+  width:50vw;
+  position:absolute;
+  bottom:4vh;
+  left:10vw;
+  color: white;
+  font-size: 1.5vmax;
+  text-shadow: 0.2em 0.2em 0.3em #888888;
+  z-index:4;
+}
+.cellkanan {
+  background-color: rgba(0,0,136,0.5);
+  color: black;
+  position: relative;
+}
+.cellatas {
+  height:calc(60vmin - 5rem);
+  position: relative;
+}
+.cellbawah {
+  height:20vh;
+  position: relative;
+}
+.cellkiriatas {
+  color: #D6D3D2;
+  text-align:right;
+  position: relative;
+}
+.cellkiribawah {
+  background-color: #D5C3AB;
+  border-bottom-left-radius: 10rem;
+  position: relative;
+}
+.cellkananbawah {
+  background-color: #6A6199;
+  position: relative;
+}
+.col1 {
+  height:calc(60vmin - 5rem);
+  background-image: url('../img/duriat_home_2.jpg');
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  text-align:right;
+  position: relative;
+}
+.col2 {
+  height:30vmin;
+  background-color: #7F7FC3;
+}
+.col2-upper {
+  height:30vmin;
+  background-color: #D5C3AB;
+  border-bottom-left-radius: 10vmin;
+  position: relative;
+}
+.col3 {
+  background-color: #7F7FC3;
+  color: white;
+  height:calc(50vh - 50vmin + 5rem);
+  position: relative;
+}
+.top_coffee {
+  z-index:6;
+  position:absolute;
+  left:3vw;
+  top:2rem;
+  width:auto;
+  height:32vmin;
+}
+.login_fancy {
+  z-index:2;
+  position:absolute;
+  left:3vw;
+  top:-8vmin;
+  width:auto;
+  height:16vmin;
+}
+.login_fancy_narrow {
+  z-index:2;
+  position:absolute;
+  left:3vw;
+  top:2vmin;
+  width:auto;
+  height:16vmin;
+}
+.register_fancy {
+  z-index:2;
+  position:absolute;
+  left:calc(4vw + 16vmin);
+  top:-8vmin;
+  width:auto;
+  height:16vmin;
+}
+.register_fancy_narrow {
+  z-index:2;
+  position:absolute;
+  left:calc(4vw + 16vmin);
+  top:2vmin;
+  width:auto;
+  height:16vmin;
+}
+.coffee_bean {
+  z-index:2;
+  position:absolute;
+  right:1vw;
+  top:1vh;
+  width:25vmin;
+  height:auto;
+}
+.almaplus_splash {
+  z-index:2;
+  position:absolute;
+  left:-6vw;
+  top:-25vmax;
+  width:auto;
+  height:50vmax;
+}
+.almaplus_splash_narrow {
+  z-index:2;
+  position:absolute;
+  right:2vw;
+  bottom:calc(-12vmin + 5vw);
+  width:auto;
+  height:calc(50vmax - 25vw);
+}
+.footer {
+  font-family: 'Inter';
+  font-size: min(1.2vmax,20px);
+  color: #CFCFC4;
+  padding-top: 1.5vh;
+  padding-left: 1vh;
+  line-height: 1.3vmax;
+}
+.footer2 {
+  font-family: 'Inter';
+  font-size: min(1.2vmax,20px);
+  color: #CFCFC4;
+  vertical-align: top;
+  text-align: left;
+  padding-left: 1vh;
+  line-height: 1.3vmax;
+}
+.container-info {
+  background-color:#E5DBCC;
+  min-height:20vh;
+}
+.top-label {
+  position:absolute;
+  left:1rem;
+  top:1rem;
+}
+.top-logo {
+  width:2.5rem;
+  padding-bottom:0.4rem;
+  z-index:7;
+}
+.top-company {
+  font-size:0.9rem;
+  color:#1E170E;
+  text-shadow:0.05rem 0.05rem 0.05rem #bbbbbb;
+}
