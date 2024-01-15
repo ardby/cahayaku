@@ -1,4 +1,4 @@
-/* === Tabel member === */
+/* === Tabel member ===  */
 drop type gender;
 create type gender AS enum ('L', 'P');
 
