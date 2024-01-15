@@ -45,9 +45,9 @@ create type gender AS enum ('L', 'P');
 
 create type personalidtype AS enum ('NIK', 'PASPOR');
 
-create type status AS enum ('ACTIVE', 'EXPIRED', 'SUSPENDED', 'BLOCKED', 'DELETED');
+create type status AS enum ('PRE-ACTIVATED', 'ACTIVE', 'EXPIRED', 'SUSPENDED', 'BLOCKED', 'DELETED');
 
-create type assetstatus AS enum ('IN STOCK', 'SOLD', 'UNDER REPAIR', 'DISPOSED');
+create type assetstatus AS enum ('PRE-STOCK', 'IN STOCK', 'SOLD', 'UNDER REPAIR', 'DISPOSED');
 
 create type pinstatus AS enum ('GENERATED', 'SOLD', 'USED', 'EXPIRED', 'RECYCLED');
 
@@ -333,7 +333,7 @@ create table pin (
 create table agen (
 	id_agen serial primary key,
 	id_member memberid,
-	status status,
+	status_agen status,
 	gudang fixedlocation,
 	zona varchar(2),
 	log logfull
