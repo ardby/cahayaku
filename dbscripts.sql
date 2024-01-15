@@ -14,7 +14,7 @@ create type memberid as (
 	no integer
 );
 drop function mbid;
-create function mbid(memberid) returns varchar as 'select concat($1.type,$1.no)' language sql;
+create function mbid(memberid) returns varchar as 'select concat($1.type,lpad(cast($1.no as varchar), 9, ''0''))' language sql;
 
 drop type logging;
 create type logging as (
