@@ -8,6 +8,12 @@ create type personalidtype AS enum ('NIK', 'PASPOR');
 drop type memberstatus;
 create type memberstatus AS enum ('ACTIVE', 'DORMANT', 'SUSPENDED', 'BLOCKED');
 
+drop type partytype;
+create type partytype as enum ('MEMBER','STOKIS','MASTER STOKIS','PERUSAHAAN','SUPPLIER','PENYEDIA JASA','PAJAK');
+
+drop type packagetype;
+create type packagetype as enum ('BASIC','SILVER','GOLD');
+
 drop type memberid;
 create type memberid as (
 	type char(1),
@@ -84,8 +90,8 @@ create table member (
 	id_upline memberid,
 	profil person,
 	bisnis business,
-	tipemember varchar(20),
-	tipepaket varchar(20),
+	tipemember partytype,
+	tipepaket packagetype,
 	tgaktif timestamp,
 	status memberstatus,
 	log logging
@@ -187,7 +193,7 @@ create table member_struct (
 	sponsor_kiri integer,
 	sponsor_kanan integer,
 	sponsor_level integer,
-	create_at timestamp
+	created_at timestamp
 );
 comment on table member_struct is 'Struktur jaringan member, baik jaringan biner (st) maupun jaringan sponsorisasi (sp).
 Semua downline akan berada di antara titik kiri dan kanan dari member. Ini akan mempercepat dan mempermudah pemrosesan yang mencakup satu group sekaligus.
@@ -205,6 +211,15 @@ create table permissions (
 /* === Tabel roles === */
 drop table roles;
 create table roles (
+	id serial primary key,
+	name varchar,
+	guard_name varchar,
+	log logging
+);
+
+/* === Tabel users === */
+drop table users;
+create table users (
 	id serial primary key,
 	name varchar,
 	guard_name varchar,
@@ -237,6 +252,14 @@ create table model_has_roles (
 	primary key (role_id, model_id, model_type)
 );
 
+/* === Tabel user_has_roles === */
+drop table user_has_roles;
+create table user_has_roles (
+	role_id integer,
+	user_id varchar,
+	primary key (role_id, user_id)
+);
+
 /* === Tabel product_type === */
 drop table product_type;
 create table product_type (
@@ -255,15 +278,11 @@ create table pin (
 	log logging
 );
 
-drop type agentype;
-create type agentype as enum ('MASTER STOKIS','STOKIS');
-
 /* === Tabel agen === */
 drop table agen;
 create table agen (
 	id_agen serial primary key,
 	id_member memberid,
-	tipe_agen agentype,
 	status memberstatus,
 	gudang fixedlocation,
 	zona varchar(2),
@@ -301,8 +320,8 @@ create type journalitem as (
 	party varchar(25)
 );
 
-drop type journalstate;
-create type journalstate as (
+drop type orderstate;
+create type orderstate as (
 	acc varchar(25),
 	waktu timestamp
 );
@@ -317,11 +336,11 @@ create table "order" (
 	qty float,
 	rate money,
 	ongkir money,
-	konfirmasi journalstate,
-	pengiriman journalstate,
-	serahterima journalstate,
-	pembayaran journalstate,
-	selesai journalstate,
+	konfirmasi orderstate,
+	pengiriman orderstate,
+	serahterima orderstate,
+	pembayaran orderstate,
+	selesai orderstate,
 	log logging
 );
 
