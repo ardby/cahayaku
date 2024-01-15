@@ -1,62 +1,87 @@
-/* === Tabel member ===  */
+/* DROP */
+
+drop table coa;
+drop table acc_type;
+drop table transaksi;
+drop table "order";
+drop table wilayah;
+drop table agen;
+drop table pin;
+drop table product_type;
+drop table user_has_roles;
+drop table model_has_roles;
+drop table model_has_permissions;
+drop table role_has_permissions;
+drop table users;
+drop table roles;
+drop table permissions;
+drop table member_struct;
+drop table "member";
+
+drop type orderstate;
+drop type journalitem;
+drop type business;
+drop type bank;
+drop type person;
+drop type personalid;
+drop type contact;
+drop type fixedlocation;
+drop type geolocation;
+drop type logging;
+drop function mbid;
+drop type memberid;
+drop type packagetype;
+drop type partytype;
+drop type memberstatus;
+drop type personalidtype;
 drop type gender;
+
+/* CREATE */
 create type gender AS enum ('L', 'P');
 
-drop type personalidtype;
 create type personalidtype AS enum ('NIK', 'PASPOR');
 
-drop type memberstatus;
 create type memberstatus AS enum ('ACTIVE', 'DORMANT', 'SUSPENDED', 'BLOCKED');
 
-drop type partytype;
 create type partytype as enum ('MEMBER','STOKIS','MASTER STOKIS','PERUSAHAAN','SUPPLIER','PENYEDIA JASA','PAJAK');
 
-drop type packagetype;
 create type packagetype as enum ('BASIC','SILVER','GOLD');
 
-drop type memberid;
 create type memberid as (
 	type char(1),
 	no integer
 );
-drop function mbid;
 create function mbid(memberid) returns varchar as 'select concat($1.type,lpad(cast($1.no as varchar), 9, ''0''))' language sql;
 
-drop type logging;
 create type logging as (
-	created_by varchar(25),
+	created_by varchar,
 	created_at timestamp,
-	updated_by varchar(25),
+	updated_by varchar,
 	updated_at timestamp
 );
 
-drop type geolocation;
 create type geolocation as (
 	latitude float,
 	longitude float
 );
 
-drop type fixedlocation;
 create type fixedlocation as (
 	alamat text,
 	wilayah varchar(50),
 	posisi geolocation
 );
 
-drop type contact;
 create type contact as (
 	nama varchar(50),
 	hp varchar(20),
 	email varchar(50)
 );
 
-drop type personalid;
 create type personalid as (
 	type personalidtype,
 	no varchar(20)
 );
 
-drop type person;
 create type person as (
 	kontak contact,
 	id personalid,
@@ -67,7 +92,6 @@ create type person as (
 	lokasi fixedlocation
 );
 
-drop type bank;
 create type bank as (
 	nama varchar(50),
 	rek varchar(30),
@@ -75,7 +99,6 @@ create type bank as (
 	nasabah varchar(50)
 );
 
-drop type business;
 create type business as (
 	npwp varchar(20),
 	bank bank,
@@ -83,8 +106,20 @@ create type business as (
 	hubwaris varchar(20)
 );
 
-drop table member;
-create table member (
+create type journalitem as (
+	acc varchar(25),
+	val float,
+	rate money,
+	party varchar(25)
+);
+
+create type orderstate as (
+	acc varchar(25),
+	waktu timestamp
+);
+
+/* === Tabel member ===  */
+create table "member" (
 	id_member memberid primary key,
 	id_sponsor memberid,
 	id_upline memberid,
@@ -184,7 +219,6 @@ log.updated_by
 */
 
 /* === Tabel member_struct === */
-drop table member_struct;
 create table member_struct (
 	id_member memberid primary key,
 	tree_kiri integer,
@@ -200,7 +234,6 @@ Semua downline akan berada di antara titik kiri dan kanan dari member. Ini akan 
 Isi tabel ini dihitung ulang secara periodik, misalnya setiap 5 menit sekali menggunakan tabel temporary yang setelah selsai diproses akan direplace ke sini.';
 
 /* === Tabel permissions === */
-drop table permissions;
 create table permissions (
 	id serial primary key,
 	name varchar,
@@ -209,7 +242,6 @@ create table permissions (
 );
 
 /* === Tabel roles === */
-drop table roles;
 create table roles (
 	id serial primary key,
 	name varchar,
@@ -218,7 +250,6 @@ create table roles (
 );
 
 /* === Tabel users === */
-drop table users;
 create table users (
 	id serial primary key,
 	name varchar,
@@ -227,7 +258,6 @@ create table users (
 );
 
 /* === Tabel role_has_permissions === */
-drop table role_has_permissions;
 create table role_has_permissions (
 	permission_id integer,
 	role_id integer,
@@ -235,7 +265,6 @@ create table role_has_permissions (
 );
 
 /* === Tabel model_has_permissions === */
-drop table model_has_permissions;
 create table model_has_permissions (
 	permission_id integer,
 	model_type varchar,
@@ -244,7 +273,6 @@ create table model_has_permissions (
 );
 
 /* === Tabel model_has_roles === */
-drop table model_has_roles;
 create table model_has_roles (
 	role_id integer,
 	model_type varchar,
@@ -253,7 +281,6 @@ create table model_has_roles (
 );
 
 /* === Tabel user_has_roles === */
-drop table user_has_roles;
 create table user_has_roles (
 	role_id integer,
 	user_id varchar,
@@ -261,14 +288,12 @@ create table user_has_roles (
 );
 
 /* === Tabel product_type === */
-drop table product_type;
 create table product_type (
 	pt_id varchar(25) primary key,
 	pt_name varchar(50)
 );
 
 /* === Tabel pin === */
-drop table pin;
 create table pin (
 	pin_id serial primary key,
 	pt_id varchar(25),
@@ -279,7 +304,6 @@ create table pin (
 );
 
 /* === Tabel agen === */
-drop table agen;
 create table agen (
 	id_agen serial primary key,
 	id_member memberid,
@@ -290,7 +314,6 @@ create table agen (
 );
 
 /* === Tabel wilayah === */
-drop table wilayah;
 create table wilayah(
 	id_wil serial primary key,
 	kodepro varchar(50),
@@ -312,21 +335,6 @@ create table wilayah(
 );
 
 /* === Tabel order === */
-drop type journalitem;
-create type journalitem as (
-	acc varchar(25),
-	val float,
-	rate money,
-	party varchar(25)
-);
-
-drop type orderstate;
-create type orderstate as (
-	acc varchar(25),
-	waktu timestamp
-);
-
-drop table "order";
 create table "order" (
 	id_order serial primary key,
 	waktu timestamp,
@@ -345,7 +353,6 @@ create table "order" (
 );
 
 /* === Tabel transaksi === */
-drop table transaksi;
 create table transaksi (
 	id_tran serial primary key,
 	waktu timestamp,
@@ -355,7 +362,6 @@ create table transaksi (
 );
 
 /* === Tabel coa_type === */
-drop table acc_type;
 create table acc_type (
 	id integer primary key,
 	name varchar(50),
@@ -365,7 +371,6 @@ create table acc_type (
 );
 
 /* === Tabel coa === */
-drop table coa;
 create table coa (
 	coa_no varchar(25) primary key,
 	acc_type integer,
@@ -400,22 +405,17 @@ insert into coa values ('1.10.04',1,'Fixed Assets - Equipment','Kekayaan Tetap -
 insert into coa values ('1.11.00',1,'Accumulated Fixed Assets Depreciation','Akumulasi Penyusutan Kekayaan Tetap','Nominal yang dialokasikan untuk biaya penyusutan, dikumpulkan sejak awal');
 insert into coa values ('1.12.00',1,'Intangible Assets','Kekayaan Non-Fisik','Contoh: paten, merk, hak cipta, metodologi, franchise');
 insert into coa values ('1.13.00',1,'Other Assets','Kekayaan Lain-Lain','Kekayaan yang beragam dan bernilai kecil, biasanya disatukan di sini');
-
 insert into coa values ('2.01.00',2,'Accounts Payable','Utang Usaha','');
 insert into coa values ('2.02.00',2,'Advance from Customer','Uang Muka dari Pelanggan','Pembayaran dari pelanggan sebelum barang atau jasa diberikan');
 insert into coa values ('2.04.00',2,'Accrued Expenses','Kewajiban yang Masih Berjalan','Kewajiban yang timbul dari pembelanjaan. Barang atau jasa sudah diterima dari supplier atau penyedia jasa, namun belum dilakukan pembayaran');
 insert into coa values ('2.05.00',2,'Current Liabilities','Kewajiban Lancar / Jangka Pendek','Kewajiban yang akan dilunasi dalam 1 tahun atau kurang, mis. gaji karyawan, utang usaha, utang bank dll');
 insert into coa values ('2.06.00',2,'Long Term Debt','Kewajiban Jangka Panjang','Kewajiban yang akan dilunasi di atas 1 tahun. Misal: cicilan kendaraan');
-
 insert into coa values ('3.01.11',3,'Owners Capital','Modal Usaha','');
 insert into coa values ('3.02.01',3,'Retained Earnings','Laba Ditahan','Laba yang tidak dibagikan ke pemilik modal dan digunakan untuk menambah modal usaha');
 insert into coa values ('3.02.02',3,'Current Earnings','Laba Bersih','Akumulasi laba dalam satu tahun yang akan dinolkan lagi setiap pergantian tahun');
-
 insert into coa values ('4.01.00',4,'Revenue from the Sale of Goods','Pendapatan Penjualan Produk','');
 insert into coa values ('4.02.00',4,'Revenue from the Rendering of Services','Pendapatan Penjualan Jasa','');
-
 insert into coa values ('5.01.00',5,'Cost of Goods Sold','Harga Pokok Penjualan','Seluruh biaya yang dikeluarkan untuk memperoleh produk yang akan dijual');
-
 insert into coa values ('6.01.01',6,'Salaries Expense','Beban Gaji','');
 insert into coa values ('6.01.02',6,'Wages Expense','Beban Upah','');
 insert into coa values ('6.02.01',6,'Bonus Expense','Beban Bonus Mitra','');
@@ -432,18 +432,15 @@ insert into coa values ('6.11.01',6,'Utilities Expense','Beban Listrik dan Air',
 insert into coa values ('6.12.02',6,'Telephone Expense','Beban Telepon','');
 insert into coa values ('6.12.03',6,'Internet Expense','Beban Internet','');
 insert into coa values ('6.13.00',6,'Depreciation Expense','Beban Penyusutan','');
-
 insert into coa values ('7.01.00',7,'Interest Revenues','Pendapatan Bunga','');
 insert into coa values ('7.02.00',7,'Gain on Sale of Assets','Keuntungan dari Penjualan Aset','');
 insert into coa values ('7.03.00',7,'Currency Gain','Keuntungan Selisih Kurs','');
 insert into coa values ('7.04.00',7,'Other Revenues','Pendapatan Lain-Lain','');
-
 insert into coa values ('8.01.00',8,'Interest Expense','Beban Bunga','');
 insert into coa values ('8.02.00',8,'Tax on Saving Interest','Pajak dari Bunga Simpanan','');
 insert into coa values ('8.03.00',8,'Loss on Sale of Assets','Kerugian dari Penjualan Aset','');
 insert into coa values ('8.04.00',8,'Currency Loss','Kerugian Selisih Kurs','');
 insert into coa values ('8.05.00',8,'Other Expenses','Beban Lain-Lain','');
-
 insert into coa values ('9.01.00',9,'Correction','Koreksi','Digunakan untuk koreksi atas kesalahan input, stock opname, atau dari perubahan lainnya');
 insert into coa values ('9.02.00',9,'Distributor’s Inventory','Inventori Stokis/Master Stokis','Digunakan untuk menghitung inventori produk yang ada di stokis/master stokis. Di sini yang diisi adalah qty (kuantitas) dari produk saja dan bukan nominalnya. Tidak diikutkan dalam perhitungan laporan keuangan perusahaan');
 insert into coa values ('9.03.00',9,'Moving Inventory','Inventori dalam Perjalanan','Digunakan untuk menandai inventori produk yang sedang dalam perjalanan perjalanan pengiriman. Ini perlu dicatat karena bisa saja ada pengiriman menggunakan kapal yang membutuhkan waktu beberapa hari. Yang dicatat adalah kuantitasnya saja');
