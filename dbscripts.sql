@@ -8,6 +8,12 @@ create type personalidtype AS enum ('NIK', 'PASPOR');
 drop type memberstatus;
 create type memberstatus AS enum ('ACTIVE', 'DORMANT', 'SUSPENDED', 'BLOCKED');
 
+drop type partytype;
+create type partytype as enum ('MEMBER','STOKIS','MASTER STOKIS','PERUSAHAAN','SUPPLIER','PENYEDIA JASA','PAJAK');
+
+drop type packagetype;
+create type packagetype as enum ('BASIC','SILVER','GOLD');
+
 drop type memberid;
 create type memberid as (
 	type char(1),
@@ -84,8 +90,8 @@ create table member (
 	id_upline memberid,
 	profil person,
 	bisnis business,
-	tipemember varchar(20),
-	tipepaket varchar(20),
+	tipemember partytype,
+	tipepaket packagetype,
 	tgaktif timestamp,
 	status memberstatus,
 	log logging
@@ -255,15 +261,11 @@ create table pin (
 	log logging
 );
 
-drop type agentype;
-create type agentype as enum ('MASTER STOKIS','STOKIS');
-
 /* === Tabel agen === */
 drop table agen;
 create table agen (
 	id_agen serial primary key,
 	id_member memberid,
-	tipe_agen agentype,
 	status memberstatus,
 	gudang fixedlocation,
 	zona varchar(2),
@@ -301,8 +303,8 @@ create type journalitem as (
 	party varchar(25)
 );
 
-drop type journalstate;
-create type journalstate as (
+drop type orderstate;
+create type orderstate as (
 	acc varchar(25),
 	waktu timestamp
 );
@@ -317,11 +319,11 @@ create table "order" (
 	qty float,
 	rate money,
 	ongkir money,
-	konfirmasi journalstate,
-	pengiriman journalstate,
-	serahterima journalstate,
-	pembayaran journalstate,
-	selesai journalstate,
+	konfirmasi orderstate,
+	pengiriman orderstate,
+	serahterima orderstate,
+	pembayaran orderstate,
+	selesai orderstate,
 	log logging
 );
 
