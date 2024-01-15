@@ -27,7 +27,8 @@ drop type personalid;
 drop type contact;
 drop type fixedlocation;
 drop type geolocation;
-drop type logging;
+drop type logfull;
+drop type logsimple;
 drop function mbid;
 drop type memberid;
 drop type packagetype;
@@ -53,11 +54,14 @@ create type memberid as (
 );
 create function mbid(memberid) returns varchar as 'select concat($1.type,lpad(cast($1.no as varchar), 9, ''0''))' language sql;
 
-create type logging as (
-	created_by varchar,
-	created_at timestamp,
-	updated_by varchar,
-	updated_at timestamp
+create type logsimple as (
+	by varchar,
+	at timestamp
+);
+
+create type logfull as (
+	created logsimple,
+	updated logsimple
 );
 
 create type geolocation as (
@@ -129,7 +133,7 @@ create table "member" (
 	tipepaket packagetype,
 	tgaktif timestamp,
 	status memberstatus,
-	log logging
+	log logfull
 );
 
 /* 
@@ -238,7 +242,7 @@ create table permissions (
 	id serial primary key,
 	name varchar,
 	guard_name varchar,
-	log logging
+	log logfull
 );
 
 /* === Tabel roles === */
@@ -246,7 +250,7 @@ create table roles (
 	id serial primary key,
 	name varchar,
 	guard_name varchar,
-	log logging
+	log logfull
 );
 
 /* === Tabel users === */
@@ -254,13 +258,14 @@ create table users (
 	id serial primary key,
 	name varchar,
 	guard_name varchar,
-	log logging
+	log logfull
 );
 
 /* === Tabel role_has_permissions === */
 create table role_has_permissions (
 	permission_id integer,
 	role_id integer,
+	created logsimple,
 	primary key (permission_id, role_id)
 );
 
@@ -269,6 +274,7 @@ create table model_has_permissions (
 	permission_id integer,
 	model_type varchar,
 	model_id integer,
+	created logsimple,
 	primary key (permission_id, model_id, model_type)
 );
 
@@ -277,6 +283,7 @@ create table model_has_roles (
 	role_id integer,
 	model_type varchar,
 	model_id integer,
+	created logsimple,
 	primary key (role_id, model_id, model_type)
 );
 
@@ -284,6 +291,7 @@ create table model_has_roles (
 create table user_has_roles (
 	role_id integer,
 	user_id varchar,
+	created logsimple,
 	primary key (role_id, user_id)
 );
 
@@ -300,7 +308,7 @@ create table pin (
 	generated_id memberid,
 	generated_pin varchar(100),
 	status varchar(10),
-	log logging
+	log logfull
 );
 
 /* === Tabel agen === */
@@ -310,7 +318,7 @@ create table agen (
 	status memberstatus,
 	gudang fixedlocation,
 	zona varchar(2),
-	log logging
+	log logfull
 );
 
 /* === Tabel wilayah === */
@@ -331,7 +339,7 @@ create table wilayah(
 	gmap_kec text,
 	gmap_des text,
 	zona varchar(2),
-	log logging
+	log logfull
 );
 
 /* === Tabel order === */
@@ -349,7 +357,7 @@ create table "order" (
 	serahterima orderstate,
 	pembayaran orderstate,
 	selesai orderstate,
-	log logging
+	log logfull
 );
 
 /* === Tabel transaksi === */
@@ -358,7 +366,7 @@ create table transaksi (
 	waktu timestamp,
 	debit journalitem,
 	credit journalitem,
-	log logging
+	log logfull
 );
 
 /* === Tabel coa_type === */
