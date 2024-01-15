@@ -34,6 +34,8 @@ drop function mbid;
 drop type memberid;
 drop type packagetype;
 drop type partytype;
+drop type pinstatus;
+drop type assetstatus;
 drop type status;
 drop type personalidtype;
 drop type gender;
@@ -44,6 +46,10 @@ create type gender AS enum ('L', 'P');
 create type personalidtype AS enum ('NIK', 'PASPOR');
 
 create type status AS enum ('ACTIVE', 'EXPIRED', 'SUSPENDED', 'BLOCKED', 'DELETED');
+
+create type assetstatus AS enum ('IN STOCK', 'SOLD', 'UNDER REPAIR', 'DISPOSED');
+
+create type pinstatus AS enum ('GENERATED', 'SOLD', 'USED', 'EXPIRED', 'RECYCLED');
 
 create type partytype as enum ('MEMBER','STOKIS','MASTER STOKIS','PERUSAHAAN','SUPPLIER','PENYEDIA JASA','PAJAK');
 
@@ -319,7 +325,7 @@ create table pin (
 	pt_id varchar(25),
 	generated_id memberid,
 	generated_pin varchar(100),
-	status varchar(10),
+	status pinstatus,
 	log logfull
 );
 
