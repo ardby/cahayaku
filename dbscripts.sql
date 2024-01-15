@@ -1,14 +1,14 @@
 /* DROP */
 
-drop table coa;
-drop table acc_type;
 drop table transaksi;
 drop table "order";
-drop table wilayah;
+drop table coa;
+drop table tacc;
 drop table agen;
+drop table wilayah;
 drop table pin;
-drop table price;
-drop table product_type;
+drop table harga;
+drop table jproduk;
 drop table user_has_roles;
 drop table model_has_roles;
 drop table model_has_permissions;
@@ -265,6 +265,7 @@ create table users (
 	id serial primary key,
 	name varchar,
 	guard_name varchar,
+	id_member memberid,
 	log logfull
 );
 
@@ -303,39 +304,33 @@ create table user_has_roles (
 );
 
 /* === Tabel product_type === */
-create table product_type (
-	pt_id varchar(25) primary key,
-	name varchar(50)
+create table jproduk (
+	id_jproduk varchar(25) primary key,
+	nama varchar(50)
 );
 
-/* === Tabel price === */
-create table price (
-	price_id serial primary key,
-	pt_id varchar(25),
-	val money,
+/* === Tabel harga === */
+create table harga (
+	id_harga serial primary key,
+	id_jproduk varchar(25),
+	penjual partytype,
+	zona varchar(2),
+	id_agen integer default 0,
+	nominal money,
 	status status,
 	mulai date,
 	sampai date,
 	log logfull
 );
+comment on column harga.id_agen is 'Hanya diisi apabila master stokis atau stokis menetapkan harga khusus yang disetujui oleh perusahaan. Default akan berisi nol. ';
 
 /* === Tabel pin === */
 create table pin (
-	pin_id serial primary key,
-	pt_id varchar(25),
-	generated_id memberid,
-	generated_pin varchar(100),
+	id_pin serial primary key,
+	id_jproduk varchar(25),
+	gen_id memberid,
+	gen_pin varchar(100),
 	status pinstatus,
-	log logfull
-);
-
-/* === Tabel agen === */
-create table agen (
-	id_agen serial primary key,
-	id_member memberid,
-	status_agen status,
-	gudang fixedlocation,
-	zona varchar(2),
 	log logfull
 );
 
@@ -360,6 +355,34 @@ create table wilayah(
 	log logfull
 );
 
+/* === Tabel agen === */
+create table agen (
+	id_agen serial primary key,
+	id_member memberid,
+	status status,
+	gudang fixedlocation,
+	zona varchar(2),
+	log logfull
+);
+
+/* === Tabel tacc (tipe account) === */
+create table tacc (
+	id_tacc integer primary key,
+	nama_en varchar(50),
+	nama_id varchar(50),
+	dc char(1),
+	report varchar(25)
+);
+
+/* === Tabel coa === */
+create table coa (
+	id_coa varchar(25) primary key,
+	id_tacc integer,
+	akun_en varchar(100),
+	akun_id varchar(100),
+	catatan text
+);
+
 /* === Tabel order === */
 create table "order" (
 	id_order serial primary key,
@@ -368,7 +391,7 @@ create table "order" (
 	pembeli varchar(25),
 	product varchar(25),
 	qty float,
-	rate money,
+	tarif money,
 	ongkir money,
 	konfirmasi orderstate,
 	pengiriman orderstate,
@@ -387,33 +410,15 @@ create table transaksi (
 	log logfull
 );
 
-/* === Tabel coa_type === */
-create table acc_type (
-	id integer primary key,
-	name varchar(50),
-	nama varchar(50),
-	dc char(1),
-	report varchar(25)
-);
-
-/* === Tabel coa === */
-create table coa (
-	coa_no varchar(25) primary key,
-	acc_type integer,
-	account varchar(100),
-	akun varchar(100),
-	catatan text
-);
-
-insert into acc_type values (1,'ASSETS','KEKAYAAN','D','BALANCE SHEET');
-insert into acc_type values (2,'LIABILITIES','KEWAJIBAN','C','BALANCE SHEET');
-insert into acc_type values (3,'EQUITY','MODAL','D','BALANCE SHEET');
-insert into acc_type values (4,'OPERATING REVENUES','PENDAPATAN OPERASIONAL','C','PROFIT/LOSS');
-insert into acc_type values (5,'COGS','HPP','D','PROFIT/LOSS');
-insert into acc_type values (6,'OPERATING EXPENSES','BEBAN OPERASIONAL','D','PROFIT/LOSS');
-insert into acc_type values (7,'NON-OPERATING REVENUES','PENDAPATAN NON-OPERASIONAL','C','PROFIT/LOSS');
-insert into acc_type values (8,'NON-OPERATING EXPENSES','BEBAN NON-OPERASIONAL','D','PROFIT/LOSS');
-insert into acc_type values (9,'ADDITIONAL JOURNAL','JURNAL TAMBAHAN','','');
+insert into tacc values (1,'ASSETS','KEKAYAAN','D','BALANCE SHEET');
+insert into tacc values (2,'LIABILITIES','KEWAJIBAN','C','BALANCE SHEET');
+insert into tacc values (3,'EQUITY','MODAL','D','BALANCE SHEET');
+insert into tacc values (4,'OPERATING REVENUES','PENDAPATAN OPERASIONAL','C','PROFIT/LOSS');
+insert into tacc values (5,'COGS','HPP','D','PROFIT/LOSS');
+insert into tacc values (6,'OPERATING EXPENSES','BEBAN OPERASIONAL','D','PROFIT/LOSS');
+insert into tacc values (7,'NON-OPERATING REVENUES','PENDAPATAN NON-OPERASIONAL','C','PROFIT/LOSS');
+insert into tacc values (8,'NON-OPERATING EXPENSES','BEBAN NON-OPERASIONAL','D','PROFIT/LOSS');
+insert into tacc values (9,'ADDITIONAL JOURNAL','JURNAL TAMBAHAN','','');
 
 insert into coa values ('1.01.00',1,'Cash or Bank','Kas atau Bank','');
 insert into coa values ('1.02.00',1,'Time Deposits','Deposito Berjangka','');
