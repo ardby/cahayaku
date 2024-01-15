@@ -299,7 +299,7 @@ create table user_has_roles (
 /* === Tabel product_type === */
 create table product_type (
 	pt_id varchar(25) primary key,
-	pt_name varchar(50)
+	name varchar(50)
 );
 
 /* === Tabel price === */
