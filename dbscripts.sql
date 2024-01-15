@@ -7,6 +7,7 @@ drop table "order";
 drop table wilayah;
 drop table agen;
 drop table pin;
+drop table price;
 drop table product_type;
 drop table user_has_roles;
 drop table model_has_roles;
@@ -33,7 +34,7 @@ drop function mbid;
 drop type memberid;
 drop type packagetype;
 drop type partytype;
-drop type memberstatus;
+drop type status;
 drop type personalidtype;
 drop type gender;
 
@@ -42,7 +43,7 @@ create type gender AS enum ('L', 'P');
 
 create type personalidtype AS enum ('NIK', 'PASPOR');
 
-create type memberstatus AS enum ('ACTIVE', 'DORMANT', 'SUSPENDED', 'BLOCKED');
+create type status AS enum ('ACTIVE', 'EXPIRED', 'SUSPENDED', 'BLOCKED', 'DELETED');
 
 create type partytype as enum ('MEMBER','STOKIS','MASTER STOKIS','PERUSAHAAN','SUPPLIER','PENYEDIA JASA','PAJAK');
 
@@ -132,7 +133,7 @@ create table "member" (
 	tipemember partytype,
 	tipepaket packagetype,
 	tgaktif timestamp,
-	status memberstatus,
+	status status,
 	log logfull
 );
 
@@ -301,6 +302,17 @@ create table product_type (
 	pt_name varchar(50)
 );
 
+/* === Tabel price === */
+create table price (
+	price_id serial primary key,
+	pt_id varchar(25),
+	val money,
+	status status,
+	mulai date,
+	sampai date,
+	log logfull
+);
+
 /* === Tabel pin === */
 create table pin (
 	pin_id serial primary key,
@@ -315,7 +327,7 @@ create table pin (
 create table agen (
 	id_agen serial primary key,
 	id_member memberid,
-	status memberstatus,
+	status status,
 	gudang fixedlocation,
 	zona varchar(2),
 	log logfull
