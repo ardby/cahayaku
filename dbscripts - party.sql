@@ -43,22 +43,15 @@ drop type personalidtype;
 drop type gender;
 
 /* CREATE */
+/* === Types ===  */
 create type gender AS enum ('L', 'P');
-
 create type personalidtype AS enum ('NIK', 'PASPOR');
-
 create type status AS enum ('PRE-ACTIVATED', 'ACTIVE', 'EXPIRED', 'SUSPENDED', 'BLOCKED', 'DELETED');
-
 create type assetstatus AS enum ('PRE-STOCK', 'IN STOCK', 'SOLD', 'UNDER REPAIR', 'DISPOSED');
-
 create type pinstatus AS enum ('GENERATED', 'SOLD', 'USED', 'EXPIRED', 'RECYCLED');
-
 create type partytype as enum ('MEMBER','STOKIS','MASTER STOKIS','PERUSAHAAN','PEMASOK','PENYEDIA JASA','PAJAK');
-
 create type packagetype as enum ('BASIC','SILVER','GOLD');
-
 create type offeringtype as enum ('BARANG','JASA');
-
 create type memberid as (
 	type char(1),
 	no integer
@@ -69,34 +62,28 @@ create type logsimple as (
 	by varchar,
 	at timestamp
 );
-
 create type logfull as (
 	created logsimple,
 	updated logsimple
 );
-
 create type geolocation as (
 	latitude float,
 	longitude float
 );
-
 create type fixedlocation as (
 	alamat text,
 	wilayah varchar(50),
 	posisi geolocation
 );
-
 create type contact as (
 	nama varchar(50),
 	hp varchar(20),
 	email varchar(50)
 );
-
 create type personalid as (
 	type personalidtype,
 	no varchar(20)
 );
-
 create type person as (
 	id personalid,
 	tplahir varchar(50),
@@ -105,28 +92,24 @@ create type person as (
 	telp varchar(20),
 	lokasi fixedlocation
 );
-
 create type bank as (
 	nama varchar(50),
 	rek varchar(30),
 	cabang varchar(50),
 	nasabah varchar(50)
 );
-
 create type business as (
 	npwp varchar(20),
 	bank bank,
 	ahliwaris varchar(50),
 	hubwaris varchar(20)
 );
-
 create type journalitem as (
 	id_coa varchar(25),
 	nilai float,
 	tarif money,
 	id_pihak integer
 );
-
 create type orderstate as (
 	id_tran integer,
 	waktu timestamp
