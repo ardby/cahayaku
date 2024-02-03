@@ -137,72 +137,83 @@ create table "member" (
 
 /* 
 Struktur tabel member
-1. id_member --> function mbid (untuk menggabungkan type dan no menjadi 10 digit ID)
-	1.1 type
-	1.2 no
-2. id_sponsor
-	2.1 type
-	2.2 no
-3. id_upline
-	3.1 type
-	3.2 no
-4. profil
-	4.1 kontak
-		4.1.1 nama
-		4.1.2 hp
-		4.1.3 email
-	4.2 id
-		4.2.1 type --> ('NIK', 'PASPOR')
-		4.2.2 no
-	4.3 tplahir
-	4.4 tglahir
-	4.5 jkel --> ('L', 'P')
-	4.6 telp
-	4.7 lokasi
-		4.7.1 alamat
-		4.7.2 wilayah --> like ke kodekec di tabel wilayah
-		4.7.3 posisi
-			4.7.3.1 latitude
-			4.7.3.2 longitude
-5. bisnis
-	5.1 npwp
-	5.2 bank
-		5.2.1 nama
-		5.2.2 rek
-		5.2.3 cabang
-		5.2.4 nasabah
-	5.3 ahliwaris
-	5.4 hubwaris
-6. tipemember --> link ke tabel tipe, kategori member
-7. tipepaket  --> link ke tabel tipe, kategori paket
-8. tgaktif
-9. status --> ('ACTIVE', 'DORMANT', 'SUSPENDED', 'BLOCKED')
-10. log
-	10.1 created_by
-	10.2 created_at
-	10.3 updated_by
-	10.4 updated_by
+1. id_pihak
+2. tipe_pihak ('MEMBER')
+3. kontak
+	3.1 nama
+	3.2 hp
+	3.3 email
+4. status ('PRE-ACTIVATED','ACTIVE','EXPIRED','SUSPENDED','BLOCKED','DELETED')
+5. log
+	5.1 created
+		5.1.1 by
+		5.1.2 at
+	5.2 updated
+		5.2.1 by
+		5.2.2 at
+6. id_member --> function mbid (untuk menggabungkan type dan no menjadi 10 digit ID)
+	6.1 type
+	6.2 no
+7. id_sponsor
+	7.1 type
+	7.2 no
+8. id_upline
+	8.1 type
+	8.2 no
+9. profil
+	9.1 id
+		9.1.1 type ('NIK','PASPOR')
+		9.1.2 no
+	9.2 tplahir
+	9.3 tglahir
+	9.4 jkel ('L','P')
+	9.5 telp
+	9.6 lokasi
+		9.6.1 alamat
+		9.6.2 wilayah --> berisi kodekec yang ada di tabel wilayah
+		9.6.3 posisi
+			9.6.3.1 latitude
+			9.6.3.2 longitude
+10. bisnis
+	10.1 npwp
+	10.2 bank
+		10.2.1 nama
+		10.2.2 rek
+		10.2.3 cabang
+		10.2.4 nasabah
+	10.3 ahliwaris
+	10.4 hubwaris
+11. tipepaket ('BASIC','SILVER','GOLD')
+12. tgaktif
+
 ----------------------------------------------------------------
 Penamaan kolom:
 
+id_pihak
+tipe_pihak
+kontak.nama
+kontak.hp
+kontak.email
+status
+log.created.by
+log.created.at
+log.updated.by
+log.updated.at
 id_member.type			\ panggil function mbid(id_member) untuk mendapatkan ID dalam format 10 digit, misalnya B000000123
 id_member.no			/
 id_sponsor.type			--> sama seperti id_member
 id_sponsor.no
 id_upline.type			--> sama seperti id_member
 id_upline.no
-profil.kontak.nama
-profil.kontak.hp
-profil.kontak.email
-profil.id.type			--> ('NIK', 'PASPOR')
+profil.id.type			--> ('NIK','PASPOR')
 profil.id.no
 profil.tplahir
 profil.tglahir
-profil.jkel				--> ('L', 'P')
+profil.jkel				--> ('L','P')
 profil.telp
 profil.lokasi.alamat
 profil.lokasi.wilayah	--> like ke kodekec di tabel wilayah
-profil.lokasi.posisi.latitude
+profil.lokasi.posisi.latidude
 profil.lokasi.posisi.longitude
 bisnis.npwp
 bisnis.bank.nama
@@ -211,14 +222,8 @@ bisnis.bank.cabang
 bisnis.bank.nasabah
 bisnis.ahliwaris
 bisnis.hubwaris
-tipemember				--> link ke tabel tipe, kategori member
-tipepaket				--> link ke tabel tipe, kategori paket
+tipepaket
 tgaktif
-status					--> ('ACTIVE', 'DORMANT', 'SUSPENDED', 'BLOCKED')
-log.created_by
-log.created_at
-log.updated_by
-log.updated_by
 */
 
 /* === Tabel member_struct === */
