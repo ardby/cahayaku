@@ -1,6 +1,7 @@
 /* DROP */
 
-drop table transaksi;
+drop table jurnal;
+drop table tran;
 drop table "order";
 drop table coa;
 drop table tacc;
@@ -18,6 +19,7 @@ drop table roles;
 drop table permissions;
 drop table member_struct;
 drop table "member";
+drop table pihak;
 
 drop type orderstate;
 drop type journalitem;
@@ -41,20 +43,15 @@ drop type personalidtype;
 drop type gender;
 
 /* CREATE */
+/* === Types ===  */
 create type gender AS enum ('L', 'P');
-
 create type personalidtype AS enum ('NIK', 'PASPOR');
-
 create type status AS enum ('PRE-ACTIVATED', 'ACTIVE', 'EXPIRED', 'SUSPENDED', 'BLOCKED', 'DELETED');
-
 create type assetstatus AS enum ('PRE-STOCK', 'IN STOCK', 'SOLD', 'UNDER REPAIR', 'DISPOSED');
-
 create type pinstatus AS enum ('GENERATED', 'SOLD', 'USED', 'EXPIRED', 'RECYCLED');
-
 create type partytype as enum ('MEMBER','STOKIS','MASTER STOKIS','PERUSAHAAN','PEMASOK','PENYEDIA JASA','PAJAK');
-
 create type packagetype as enum ('BASIC','SILVER','GOLD');
-
+create type offeringtype as enum ('BARANG','JASA');
 create type memberid as (
 	type char(1),
 	no integer
@@ -65,34 +62,29 @@ create type logsimple as (
 	by varchar,
 	at timestamp
 );
-
 create type logfull as (
 	created logsimple,
 	updated logsimple
 );
-
 create type geolocation as (
 	latitude float,
 	longitude float
 );
-
 create type fixedlocation as (
 	alamat text,
 	wilayah varchar(50),
 	posisi geolocation
 );
-
 create type contact as (
 	nama varchar(50),
 	hp varchar(20),
+        wa varchar(20),
 	email varchar(50)
 );
-
 create type personalid as (
 	type personalidtype,
 	no varchar(20)
 );
-
 create type person as (
 	id personalid,
 	tplahir varchar(50),
@@ -101,31 +93,36 @@ create type person as (
 	telp varchar(20),
 	lokasi fixedlocation
 );
-
 create type bank as (
 	nama varchar(50),
 	rek varchar(30),
 	cabang varchar(50),
 	nasabah varchar(50)
 );
-
 create type business as (
 	npwp varchar(20),
 	bank bank,
 	ahliwaris varchar(50),
 	hubwaris varchar(20)
 );
-
 create type journalitem as (
 	id_coa varchar(25),
 	nilai float,
 	tarif money,
 	id_pihak integer
 );
-
 create type orderstate as (
 	id_tran integer,
 	waktu timestamp
+);
+
+/* === Tabel pihak ===  */
+create table pihak (
+	id_pihak serial primary key,
+	tipe_pihak partytype,
+	kontak contact,
+	status status,
+	log logfull
 );
 
 /* === Tabel member ===  */
@@ -137,76 +134,88 @@ create table "member" (
 	bisnis business,
 	tipepaket packagetype,
 	tgaktif timestamp
-);
+) inherits(pihak);
 
 /* 
 Struktur tabel member
-1. id_member --> function mbid (untuk menggabungkan type dan no menjadi 10 digit ID)
-	1.1 type
-	1.2 no
-2. id_sponsor
-	2.1 type
-	2.2 no
-3. id_upline
-	3.1 type
-	3.2 no
-4. profil
-	4.1 kontak
-		4.1.1 nama
-		4.1.2 hp
-		4.1.3 email
-	4.2 id
-		4.2.1 type --> ('NIK', 'PASPOR')
-		4.2.2 no
-	4.3 tplahir
-	4.4 tglahir
-	4.5 jkel --> ('L', 'P')
-	4.6 telp
-	4.7 lokasi
-		4.7.1 alamat
-		4.7.2 wilayah --> like ke kodekec di tabel wilayah
-		4.7.3 posisi
-			4.7.3.1 latitude
-			4.7.3.2 longitude
-5. bisnis
-	5.1 npwp
-	5.2 bank
-		5.2.1 nama
-		5.2.2 rek
-		5.2.3 cabang
-		5.2.4 nasabah
-	5.3 ahliwaris
-	5.4 hubwaris
-6. tipemember --> link ke tabel tipe, kategori member
-7. tipepaket  --> link ke tabel tipe, kategori paket
-8. tgaktif
-9. status --> ('ACTIVE', 'DORMANT', 'SUSPENDED', 'BLOCKED')
-10. log
-	10.1 created_by
-	10.2 created_at
-	10.3 updated_by
-	10.4 updated_by
+1. id_pihak
+2. tipe_pihak ('MEMBER')
+3. kontak
+	3.1 nama
+	3.2 hp
+        3.3 wa
+	3.4 email
+4. status ('PRE-ACTIVATED','ACTIVE','EXPIRED','SUSPENDED','BLOCKED','DELETED')
+5. log
+	5.1 created
+		5.1.1 by
+		5.1.2 at
+	5.2 updated
+		5.2.1 by
+		5.2.2 at
+6. id_member --> function mbid (untuk menggabungkan type dan no menjadi 10 digit ID)
+	6.1 type
+	6.2 no
+7. id_sponsor
+	7.1 type
+	7.2 no
+8. id_upline
+	8.1 type
+	8.2 no
+9. profil
+	9.1 id
+		9.1.1 type ('NIK','PASPOR')
+		9.1.2 no
+	9.2 tplahir
+	9.3 tglahir
+	9.4 jkel ('L','P')
+	9.5 telp
+	9.6 lokasi
+		9.6.1 alamat
+		9.6.2 wilayah --> berisi kodekec yang ada di tabel wilayah
+		9.6.3 posisi
+			9.6.3.1 latitude
+			9.6.3.2 longitude
+10. bisnis
+	10.1 npwp
+	10.2 bank
+		10.2.1 nama
+		10.2.2 rek
+		10.2.3 cabang
+		10.2.4 nasabah
+	10.3 ahliwaris
+	10.4 hubwaris
+11. tipepaket ('BASIC','SILVER','GOLD')
+12. tgaktif
+
 ----------------------------------------------------------------
 Penamaan kolom:
 
+id_pihak
+tipe_pihak
+kontak.nama
+kontak.hp
+kontak.email
+status
+log.created.by
+log.created.at
+log.updated.by
+log.updated.at
 id_member.type			\ panggil function mbid(id_member) untuk mendapatkan ID dalam format 10 digit, misalnya B000000123
 id_member.no			/
 id_sponsor.type			--> sama seperti id_member
 id_sponsor.no
 id_upline.type			--> sama seperti id_member
 id_upline.no
-profil.kontak.nama
-profil.kontak.hp
-profil.kontak.email
-profil.id.type			--> ('NIK', 'PASPOR')
+profil.id.type			--> ('NIK','PASPOR')
 profil.id.no
 profil.tplahir
 profil.tglahir
-profil.jkel				--> ('L', 'P')
+profil.jkel				--> ('L','P')
 profil.telp
 profil.lokasi.alamat
 profil.lokasi.wilayah	--> like ke kodekec di tabel wilayah
-profil.lokasi.posisi.latitude
+profil.lokasi.posisi.latidude
 profil.lokasi.posisi.longitude
 bisnis.npwp
 bisnis.bank.nama
@@ -215,14 +224,8 @@ bisnis.bank.cabang
 bisnis.bank.nasabah
 bisnis.ahliwaris
 bisnis.hubwaris
-tipemember				--> link ke tabel tipe, kategori member
-tipepaket				--> link ke tabel tipe, kategori paket
+tipepaket
 tgaktif
-status					--> ('ACTIVE', 'DORMANT', 'SUSPENDED', 'BLOCKED')
-log.created_by
-log.created_at
-log.updated_by
-log.updated_by
 */
 
 /* === Tabel member_struct === */
@@ -260,6 +263,7 @@ create table roles (
 create table users (
 	id serial primary key,
 	name varchar,
+	password varchar,
 	guard_name varchar,
 	id_member memberid,
 	log logfull
@@ -325,7 +329,7 @@ comment on column harga.id_agen is 'Hanya diisi apabila master stokis atau stoki
 /* === Tabel pin === */
 create table pin (
 	id_pin serial primary key,
-	id_jproduk varchar(25),
+	id_brgjasa varchar(25),
 	gen_id memberid,
 	gen_pin varchar(100),
 	status pinstatus,
@@ -357,11 +361,9 @@ create table wilayah(
 create table agen (
 	id_agen serial primary key,
 	id_member memberid,
-	status status,
 	gudang fixedlocation,
-	zona varchar(2),
-	log logfull
-);
+	zona varchar(2)
+) inherits(pihak);
 
 /* === Tabel tacc (tipe account) === */
 create table tacc (
@@ -385,11 +387,11 @@ create table coa (
 create table "order" (
 	id_order serial primary key,
 	waktu timestamp,
-	penjual varchar(25),
-	pembeli varchar(25),
-	product varchar(25),
+	id_penjual integer,
+	id_pembeli integer,
+	id_brgjasa integer,
 	qty float,
-	tarif money,
+	hargaunit money,
 	ongkir money,
 	konfirmasi orderstate,
 	pengiriman orderstate,
@@ -399,13 +401,20 @@ create table "order" (
 	log logfull
 );
 
-/* === Tabel transaksi === */
-create table transaksi (
+/* === Tabel tran === */
+create table tran (
 	id_tran serial primary key,
 	waktu timestamp,
+	catatan text,
+	created logsimple
+);
+
+/* === Tabel jurnal === */
+create table jurnal (
+	id_jurnal serial primary key,
+	id_tran integer,
 	debit journalitem,
-	credit journalitem,
-	log logfull
+	credit journalitem
 );
 
 insert into tacc values (1,'ASSETS','KEKAYAAN','D','BALANCE SHEET');
