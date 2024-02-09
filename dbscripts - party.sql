@@ -263,6 +263,7 @@ create table roles (
 create table users (
 	id serial primary key,
 	name varchar,
+	password varchar,
 	guard_name varchar,
 	id_member memberid,
 	log logfull
